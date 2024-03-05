@@ -32,6 +32,9 @@ const bodyParser = require('body-parser')
 const {Expense} = require('./schema.js')
 const cors = require('cors')
 
+//cors -> enables secure communication between applications hosted on different origins.
+//avoids data inter communication
+
 const app = express()
 
 //connect
@@ -54,7 +57,7 @@ async function connecttoDB(){
 connecttoDB()
 
 app.use(bodyParser.json())
-app.use(cors())
+app.use(cors)
 
 app.post('/add-expense',async function(request,response){
     // console.log(request.body)
