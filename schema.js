@@ -17,3 +17,17 @@ const expenseTrackerSchema= new mongoose.Schema({
 const Expense = mongoose.model('ExpenseDetails',expenseTrackerSchema)
 
 module.exports = {Expense}
+
+const userSchema = new mongoose.Schema({
+    name : {
+        type : String
+    },
+    email : {
+        type : String
+    },
+    password : {
+        type : String
+    }
+})
+const User = mongoose.model('userdetails',userSchema)
+module.exports = {User}

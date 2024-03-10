@@ -29,7 +29,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const {Expense} = require('./schema.js')
+const {Expense,User} = require('./schema.js')
 const cors = require('cors')
 
 //cors -> enables secure communication between applications hosted on different origins.
@@ -57,7 +57,7 @@ async function connecttoDB(){
 connecttoDB()
 
 app.use(bodyParser.json())
-app.use(cors)
+app.use(cors())
 
 app.post('/add-expense',async function(request,response){
     // console.log(request.body)
@@ -69,6 +69,7 @@ app.post('/add-expense',async function(request,response){
     //accessing the modle from the schema ->Expense
     try{
         //this block is  used to add the data from postman(request body) to mongodb compass or atlas
+        console.log("hello")
         await Expense.create({
             "amount" : request.body.amount,
             "category" : request.body.category,
@@ -156,6 +157,98 @@ app.patch('/edit-expense/:id',async function(request,response){
             "status" : "failure",
             "message" : "couldn/'t delete entries",
             "error" : error
+        })
+    }
+})
+
+
+app.post('/add-user',async function(request,response){
+    try{
+        await User.create({
+            "name" : request.body.name,
+            "email" : request.body.email,
+            "password" : request.body.password
+        })
+        response.status(201).json({
+            "status":"Success",
+            "message":"new user created"
+        })
+    }
+    catch(error){
+        response.status(500).json({
+            "status" : "failure",
+            "message" : "couldn/'t add user",
+            "error" : error
+        })
+    }
+})
+
+app.get('/get-user',async function(request,response){
+    try{
+        const userData = await User.find()
+        response.status(200).json(userData)
+    }
+    catch(error){
+        response.status(500).json({
+            "status" : "failure",
+            "message" : "couldn/'t fetch entries",
+            "error" : error
+        })
+    }
+})
+
+app.delete('/delete-user/:id',async function(request,response){
+    try{
+        const userEntry = await User.findById(request.params.id)
+        if(userEntry){
+            await User.findByIdAndDelete(request.params.id)
+            response.status(200).json({
+                "status":"success",
+                "message":"deleted user"
+            })
+        }
+        else{
+            response.status(404).json({
+                "status":"failure",
+                "message":"couldn'/t find the document"
+            })
+        }
+    }
+    catch(error){
+        response.status(500).json({
+            "status" : "failure",
+            "message" : "couldn/'t delete entries",
+            "error" : error
+        })
+    }
+})
+
+app.patch('/edit-user',async function(request,response){
+    try{
+        const userupdate = await User.findById(request.params.id)
+        if(userupdate){
+            await User.updateOne({
+                "name" : request.body.name,
+                "email" : request.body.email,
+                "password" : request.body.password
+            })
+            response.status(200).json({
+                "status": "success",
+                "message" : "updated success"
+            })
+        }
+        else{
+            response.status(404).json({
+                "status" : "failure",
+                "message" : "couldn/'t find the file"
+            })
+        }
+    }
+    catch(error){
+        response.status(500).json({
+            "status":"failure",
+            "message":"couldn/'t update user",
+            "error":error
         })
     }
 })
