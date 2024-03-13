@@ -44,7 +44,7 @@ async function connecttoDB(){
         await mongoose.connect('mongodb+srv://Kamali:kamali_445@cluster0.qxlvbz0.mongodb.net/ExpenseTracker?retryWrites=true&w=majority&appName=Cluster0') 
         console.log('Db Connnectin Established :)')
         // const x = process.env.PORT //port number will be given by itself
-        const port = process.env.PORT || 3000
+        const port = 3000 || process.env.PORT
         app.listen(port,function(){
             console.log(`Listining to the ${port}...`)
         })
@@ -54,7 +54,7 @@ async function connecttoDB(){
         console.log('Couldn\'t connect to this network :(')
     }
 }
-connecttoDB()
+connecttoDB()   
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -91,6 +91,7 @@ app.post('/add-expense',async function(request,response){
 
 app.get('/get-expense',async function(request,response){
     try{
+        console.log("hello")
         const expensesData = await Expense.find()
         response.status(200).json(expensesData)
     }

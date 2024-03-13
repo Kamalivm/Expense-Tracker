@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 //defining schema 
 const expenseTrackerSchema= new mongoose.Schema({
-    amount : {
-        type : Number
-    },
     category : {
         type : String
+    },
+    amount : {
+        type : Number
     },
     date : {
         type : String
